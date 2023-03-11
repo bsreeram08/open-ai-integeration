@@ -1,0 +1,28 @@
+{
+  "name": "chat_completion",
+  "version": "1.0.0",
+  "description": "A chat completion app that integrates with OPEN_AI",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest",
+    "tsc": "tsc",
+    "compile": "tsc && node ./dist/index.js",
+    "dev": "concurrently --kill-others \"tsc -w\" \"nodemon dist/index.js\"",
+    "serve": "node ./dist/index.js"
+  },
+  "author": "Sreeram",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.14.0",
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
+    "tsc": "^2.0.4",
+    "typescript": "^5.0.1-rc"
+  },
+  "dependencies": {
+    "@jetit/id": "^0.0.9",
+    "gpt-3-encoder": "^1.1.4",
+    "ioredis": "^5.3.1",
+    "openai": "^3.2.1"
+  }
+}

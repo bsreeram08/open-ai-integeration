@@ -1,6 +1,12 @@
 import { ClusterNode, ClusterOptions, Redis, RedisOptions } from "ioredis";
 import { ALLOWED_IN_REDIS } from "./types";
 import { getEmbeddings, storeEmbeddings } from "./embeddings";
+import {
+  addAssistantMessage,
+  addUserMessage,
+  chatMessages,
+} from "./chat.gpt3-5";
+import { ChatCompletionRequestMessage } from "openai";
 
 interface IOptions {
   redis?: RedisOptions;
@@ -32,6 +38,17 @@ export function redis(option: IOptions) {
         );
       },
     },
+    chat: {
+      messages: (chatId: string) => chatMessages(redis, chatId),
+      addAssistantMessage: (
+        chatId: string,
+        messages: Array<ChatCompletionRequestMessage>
+      ) => addAssistantMessage(redis, chatId, messages),
+      addUserMessage: (
+        chatId: string,
+        messages: Array<ChatCompletionRequestMessage>
+      ) => addUserMessage(redis, chatId, messages),
+    },
   };
 }
 
@@ -48,3 +65,5 @@ function getRedis(option: IOptions) {
 function pathFramer(key: string, entity: "embeddings") {
   return `${entity}:${key}`;
 }
+
+export type RedisDB = ReturnType<typeof redis>;

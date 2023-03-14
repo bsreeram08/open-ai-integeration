@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from "openai";
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { generateImage } from "./generate_image";
 import {
   EMBEDDING_MODEL,
@@ -6,6 +6,7 @@ import {
   createAnEmbedding,
 } from "./embedding";
 import { generateTokensForText, decodeTokensToText } from "./text_token";
+import { chatGPT3_5 } from "./chat";
 
 export function openAI(configuration: Configuration) {
   const openAI = new OpenAIApi(configuration);
@@ -22,5 +23,11 @@ export function openAI(configuration: Configuration) {
     generateImage: (prompt: string, noOfImages = 1) =>
       generateImage(openAI, prompt, noOfImages),
     tokens: { generateTokensForText, decodeTokensToText },
+    chat: {
+      chatGPT: (messages: Array<ChatCompletionRequestMessage>, asSSE = false) =>
+        chatGPT3_5(openAI, messages, asSSE),
+    },
   };
 }
+
+export type OpenAiAPI = ReturnType<typeof openAI>;

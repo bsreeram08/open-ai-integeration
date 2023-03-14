@@ -1,24 +1,17 @@
-import { CreateSearchRequest, OpenAIApi } from "openai";
-export function createChatCompletion(openAI: OpenAIApi, prompt: string) {
-  openAI.createChatCompletion({
-    messages: [
-      {
-        content: "Hey, what is up my friend?",
-        role: "user",
-        name: "Sreeram",
-      },
-      {
-        content: "What do you want to know about dude?",
-        role: "assistant",
-        name: "SRB_BOT",
-      },
-      {
-        content: "I want to know what the cat is drinking?",
-        role: "user",
-        name: "Sreeram",
-      },
-    ],
-    model: "text-davinci-003",
-    temperature: 0,
-  });
+import { ChatCompletionRequestMessage } from "openai";
+import { RedisType } from "./types";
+export async function chatMessages(redis: RedisType, chatId: string) {
+  return (await redis.lrange(chatId, 0, -1)).map(
+    (v) => JSON.parse(v) as unknown as ChatCompletionRequestMessage
+  );
 }
+
+export async function addAssistantMessage(
+  redis: RedisType,
+  chatId: string,
+  messages: Array<ChatCompletionRequestMessage>
+) {
+  return await redis.rpush(chatId, ...messages.map((v) => JSON.stringify(v)));
+}
+
+export const addUserMessage = addAssistantMessage;

@@ -1,7 +1,10 @@
-import { bootstrapEmbeddings } from "./embeddings";
+/* import { bootstrapEmbeddings } from "./embeddings"; */
+
+import { bootstrapChat } from "./chat";
 
 export async function bootstrap() {
-  bootstrapEmbeddings();
+  /*   bootstrapEmbeddings(); */
+  await bootstrapChat();
 }
 
 bootstrap();

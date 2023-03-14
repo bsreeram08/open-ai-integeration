@@ -2,6 +2,7 @@ import { Configuration } from "openai";
 import { openAI } from "./openai";
 import { redis } from "./redis";
 import { environment } from "./environment/environment";
+import { prompts } from "./prompt";
 
 export async function bootstrapEmbeddings() {
   const configuration = new Configuration({
@@ -11,18 +12,11 @@ export async function bootstrapEmbeddings() {
   const openAiAPI = await openAI(configuration);
   const db = redis({
     redis: {
-      host: "127.0.0.1",
-      port: 6379,
+      host: environment.redisSecrets.redisHost,
+      port: environment.redisSecrets.redisPort,
     },
   });
-  const prompts = [
-    "A cat drinking milk",
-    "Cat having a nap.",
-    "cat is a terminal command.",
-    "What is cat command",
-    "Cat jumped off of a window",
-    "Window is black",
-  ];
+
   const embeddings = await Promise.all(
     prompts.map(async (prompt) => {
       const tokenRequired = openAiAPI.tokens.generateTokensForText(prompt);
@@ -47,7 +41,7 @@ export async function bootstrapEmbeddings() {
     })
   );
 
-  const question = "What color is the window?";
+  const question = "What are terminals?";
   const questionEmbedding = (
     await openAiAPI.embeddings.createEmbedding(
       question,
@@ -66,5 +60,5 @@ export async function bootstrapEmbeddings() {
       };
     })
     .sort((v1, v2) => v2.value - v1.value);
-  console.log(cosineSimilarities.map((v) => v.prompt));
+  console.log(cosineSimilarities.map((v) => v.prompt)[0]);
 }

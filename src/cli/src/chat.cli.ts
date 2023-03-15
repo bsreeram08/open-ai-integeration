@@ -42,9 +42,10 @@ export async function getChatResponse(
 
 export async function chat(openAiAPI: OpenAiAPI, redis: RedisDB) {
   const _chatId = await readLineAsync(
-    `Existing chat id? [Enter "NEW" if  you don't have one] : `
+    `Existing chat id? [Blank if you don't have one] : `
   );
-  const chatId = _chatId === "NEW" ? undefined : _chatId;
+
+  const chatId = _chatId.length > 0 ? _chatId : undefined;
   const res = await getChatResponse(openAiAPI, redis, chatId);
   const id = res.chatId;
   console.log(chalk.green.bgBlue.bold(`Chat ID : ${res.chatId}`));

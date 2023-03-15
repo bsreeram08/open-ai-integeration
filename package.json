@@ -5,11 +5,11 @@
   "main": "index.ts",
   "scripts": {
     "test": "jest",
-    "tsc": "tsc",
-    "tsc:watch": "tsc --watch",
+    "tsc": "./node_modules/typescript/bin/tsc",
+    "tsc:watch": "./node_modules/typescript/bin/tsc --watch",
     "dev:nodemon": "nodemon dist/index.js",
-    "compile": "tsc && node ./dist/index.js",
-    "dev": "concurrently --kill-others \"tsc -w\" \"nodemon dist/index.js\"",
+    "compile": "./node_modules/typescript/bin/tsc && node ./dist/index.js",
+    "dev": "concurrently --kill-others \"./node_modules/typescript/bin/tsc -w\" \"nodemon dist/index.js\"",
     "serve": "node ./dist/index.js"
   },
   "author": "Sreeram",
@@ -18,7 +18,7 @@
     "@types/node": "^18.14.0",
     "concurrently": "^7.6.0",
     "nodemon": "^2.0.20",
-    "tsc": "^2.0.4",
+    "./node_modules/typescript/bin/tsc": "^2.0.4",
     "typescript": "^5.0.1-rc"
   },
   "dependencies": {
